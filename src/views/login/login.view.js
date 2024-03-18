@@ -1,6 +1,8 @@
-import { Button, Fade, TextField, ThemeProvider, createTheme } from "@mui/material";
+import { Button, Fade, IconButton, TextField, ThemeProvider, createTheme } from "@mui/material";
 import './login.style.css'
 import useLogin from "../../hooks/useLogin";
+import { useState } from "react";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 const theme = createTheme({
     components: {
@@ -38,6 +40,8 @@ const theme = createTheme({
 
 export default function LoginView (){
 
+    const [showPassword, setShowPassword] = useState(false)
+
     const {
       form, 
       onChangeForm, 
@@ -69,7 +73,10 @@ export default function LoginView (){
                         autoComplete="off"
                         label = "Contraseña"
                         variant="outlined"
-                        type="password"
+                        type={showPassword ? 'text' : 'password'}
+                        InputProps={{
+                          endAdornment: <IconButton onClick={() => setShowPassword(!showPassword)}>{showPassword ? <VisibilityOff style={{color: 'white'}}/> : <Visibility style={{color: 'white'}}/>}</IconButton>
+                        }}
                     />
                     <Button variant="contained" color="success" type="submit">Ingresar</Button>
                 </form>

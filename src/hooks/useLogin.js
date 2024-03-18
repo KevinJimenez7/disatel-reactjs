@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { apiLogin } from "../actions/login.actions"
 import { useDispatch } from "react-redux"
-import { setIsLoading } from "../redux/slices/generalSlice"
+import { setIsLoading, setModalError } from "../redux/slices/generalSlice"
 import { setAuthToken, setIsAuthenticated, setUserData } from "../redux/slices/authSlice"
 import { useNavigate } from "react-router-dom"
 import useDashboard from "./useDashboard"
@@ -53,9 +53,9 @@ export default function(){
                         firstName: res.data?.data?.firstName,
                         lastName: res.data?.data?.lastName,
                         rol: res.data?.data?.rol,
-                        username: res.data?.data?.username
+                        username: res.data?.data?.username,
+                        resetPassword: res.data?.data?.resetPassword
                     }))
-                    // getAllCredentials(res.data?.data?.token)
                     
                     setTimeout(async() => {
                         dispatch(setIsAuthenticated(true))
@@ -63,11 +63,19 @@ export default function(){
                 }
             })
             .catch(err => {
-                console.log(err);
+                dispatch(setModalError({
+                    open: true,
+                    title: err.response.data.message || 'Ocurrió un error',
+                    message: err.response.data.error.description || 'No se pudo completar la acción, intenta nuevamente'
+                }))
             })
             dispatch(setIsLoading(false))
         } catch (error) {
-            console.log(error);
+            dispatch(setModalError({
+                open: true,
+                title: 'Ocurrió un error',
+                message: 'No se pudo completar la acción, intenta nuevamente'
+            }))
             dispatch(setIsLoading(false))
         }
     }

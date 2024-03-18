@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setIsLoading, setOpenModalFolder } from "../redux/slices/generalSlice";
+import { setIsLoading, setModalError, setOpenModalFolder } from "../redux/slices/generalSlice";
 import { apiActiveFolder, apiCreateCredential, apiCreateFolder, apiDeleteCredential, apiGetFolders, apiUpadteCredential } from "../actions/dashboard.actions";
 import { resetFormCredential, setEditFormCredential, setFolders, setFormCredential, setSelectedCredential, setSelectedFolder, setVisibleFolders } from "../redux/slices/foldersSlice";
 import { resetFormUser, setOpenUsers, setUserSelected } from "../redux/slices/usersSlice";
@@ -19,8 +19,12 @@ export default function useDashboard (){
     const dispatch = useDispatch()
 
     useEffect(() => {
-        dispatch(setVisibleFolders(true))
-        getAllCredentials(token)
+
+        if(token){
+            dispatch(setVisibleFolders(true))
+            getAllCredentials(token)
+        }
+
     }, [])
 
     const getAllCredentials = async(token) => {
@@ -29,15 +33,22 @@ export default function useDashboard (){
 
             await apiGetFolders(token)
             .then(res => {
-                console.log(res.data.data.folders);
                 dispatch(setFolders(res.data.data.folders))
             })
             .catch(err => {
-                console.log(err);
+                dispatch(setModalError({
+                    open: true,
+                    title: 'Ocurrió un error',
+                    message: 'No se pudo completar la acción'
+                }))
             })
 
         } catch (error) {
-            console.log(error);
+            dispatch(setModalError({
+                open: true,
+                title: 'Ocurrió un error',
+                message: 'No se pudo completar la acción, intenta nuevamente'
+            }))
         } finally {
             dispatch(setIsLoading(false))
         }
@@ -62,10 +73,18 @@ export default function useDashboard (){
                 }
             })
             .catch((err) => {
-                console.log(err);
+                dispatch(setModalError({
+                    open: true,
+                    title: 'Ocurrió un error',
+                    message: 'No se pudo completar la acción'
+                }))
             })
         } catch (error) {
-            console.log(error);
+            dispatch(setModalError({
+                open: true,
+                title: 'Ocurrió un error',
+                message: 'No se pudo completar la acción, intenta nuevamente'
+            }))
         } finally {
             dispatch(setIsLoading(false))
         }
@@ -138,11 +157,19 @@ export default function useDashboard (){
                 }
             })
             .catch((err) => {
-                console.log(err);
+                dispatch(setModalError({
+                    open: true,
+                    title: 'Ocurrió un error',
+                    message: 'No se pudo completar la acción'
+                }))
             })
 
         } catch (error) {
-            console.log(error);
+            dispatch(setModalError({
+                open: true,
+                title: 'Ocurrió un error',
+                message: 'No se pudo completar la acción, intenta nuevamente'
+            }))
         } finally {
             dispatch(setIsLoading(false))
         }
@@ -163,11 +190,19 @@ export default function useDashboard (){
                 }
             })
             .catch((err) => {
-                console.log(err);
+                dispatch(setModalError({
+                    open: true,
+                    title: 'Ocurrió un error',
+                    message: 'No se pudo completar la acción'
+                }))
             })
 
         } catch (error) {
-            console.log(error);
+            dispatch(setModalError({
+                open: true,
+                title: 'Ocurrió un error',
+                message: 'No se pudo completar la acción, intenta nuevamente'
+            }))
         } finally {
             dispatch(setIsLoading(false))
         }
@@ -186,11 +221,19 @@ export default function useDashboard (){
                 }
             })
             .catch((err) => {
-                console.log(err);
+                dispatch(setModalError({
+                    open: true,
+                    title: 'Ocurrió un error',
+                    message: 'No se pudo completar la acción'
+                }))
             })
 
         } catch (error) {
-            console.log(error);
+            dispatch(setModalError({
+                open: true,
+                title: 'Ocurrió un error',
+                message: 'No se pudo completar la acción, intenta nuevamente'
+            }))
         } finally {
             dispatch(setIsLoading(false))
         }
@@ -209,11 +252,19 @@ export default function useDashboard (){
                 }
             })
             .catch((err) => {
-                console.log(err);
+                dispatch(setModalError({
+                    open: true,
+                    title: 'Ocurrió un error',
+                    message: 'No se pudo completar la acción'
+                }))
             })
 
         } catch (error) {
-            console.log(error);
+            dispatch(setModalError({
+                open: true,
+                title: 'Ocurrió un error',
+                message: 'No se pudo completar la acción, intenta nuevamente'
+            }))
         } finally {
             dispatch(setIsLoading(false))
         }

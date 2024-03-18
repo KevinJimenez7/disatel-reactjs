@@ -8,6 +8,7 @@ import Credentials from '../../components/credentialList'
 import Credential from '../../components/credentialDetail'
 import Users from '../../components/userList'
 import UserDetail from '../../components/userDetail'
+import ModalPassword from '../modals/modalCredential'
 
 export default function Dashboard (){
 
@@ -22,6 +23,7 @@ export default function Dashboard (){
 
     return (
         <main className="dashboard-container">
+            <ModalPassword/>
             <ModalFolder open={modalFolder} formFolder={formFolder} onChangeFormFolder={onChangeFormForlder} openCloseModalFolder={openCloseModalFolder} createNewFolder={createNewFolder}/>
             <Slide style={{zIndex: 50}} direction='right' in = {visibleFolders} mountOnEnter unmountOnExit>
                 <section className="folders-container">

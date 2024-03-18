@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux"
 import { resetFormUser, setFormEditUser, setFormUser, setUserSelected, setUsers } from "../redux/slices/usersSlice"
-import { setIsLoading } from "../redux/slices/generalSlice"
+import { setIsLoading, setModalError, setModalMessage } from "../redux/slices/generalSlice"
 import { apiActivateUser, apiCreateUser, apiGetUsers, apiResetPasswordUser, apiUpdateUser } from "../actions/users.actions"
 import { useEffect } from "react"
 
@@ -9,7 +9,7 @@ export default function useUsers(){
     const dispatch = useDispatch()
 
     const {open, formUser, users, userSelected} = useSelector(state => state.users)
-    const {token} = useSelector(state => state.auth)
+    const {token, userData} = useSelector(state => state.auth)
 
     const onChangeFormUser = (e) => {
         const {name, value} = e.target
@@ -26,15 +26,22 @@ export default function useUsers(){
 
             await apiGetUsers(token)
             .then((res) => {
-                console.log(res);
                 dispatch(setUsers(res.data.data.users))
             })
             .catch((err) => {
-                console.log(err);
+                dispatch(setModalError({
+                    open: true,
+                    title: 'Ocurrió un error',
+                    message: 'No se pudo completar la acción, intenta nuevamente'
+                }))
             })
 
         } catch (error) {
-            console.log(error);
+            dispatch(setModalError({
+                open: true,
+                title: 'Ocurrió un error',
+                message: 'No se pudo completar la acción, intenta nuevamente'
+            }))
         } finally {
             dispatch(setIsLoading(false))
         }
@@ -64,17 +71,30 @@ export default function useUsers(){
             await apiCreateUser(token , formUser)
             .then((res) => {
                 if(res.status === 200){
+                    dispatch(setModalMessage({
+                        open: true,
+                        title: 'Usuario creado correctamente',
+                        message: `Nombre de usuario: ${res.data?.data?.username}, Constraseña temporal: ${res.data?.data?.temporalPassword}`
+                    }))
                     dispatch(resetFormUser())
                     openUser(null)
                     getAllUsers(token)
                 }
             })
             .catch((err) => {
-                console.log(err);
+                dispatch(setModalError({
+                    open: true,
+                    title: 'Ocurrió un error',
+                    message: 'No se pudo completar la acción, intenta nuevamente'
+                }))
             })
 
         } catch (error) {
-            console.log(error);
+            dispatch(setModalError({
+                open: true,
+                title: 'Ocurrió un error',
+                message: 'No se pudo completar la acción, intenta nuevamente'
+            }))
         } finally {
             dispatch(setIsLoading(false))
         }
@@ -95,11 +115,19 @@ export default function useUsers(){
                 }
             })
             .catch((err) => {
-                console.log(err);
+                dispatch(setModalError({
+                    open: true,
+                    title: 'Ocurrió un error',
+                    message: 'No se pudo completar la acción, intenta nuevamente'
+                }))
             })
 
         } catch (error) {
-            console.log(error);
+            dispatch(setModalError({
+                open: true,
+                title: 'Ocurrió un error',
+                message: 'No se pudo completar la acción, intenta nuevamente'
+            }))
         } finally {
             dispatch(setIsLoading(false))
         }
@@ -115,10 +143,20 @@ export default function useUsers(){
                     getAllUsers()
                 }
             })
-            .catch(err => console.log(err))
+            .catch(err => {
+                dispatch(setModalError({
+                    open: true,
+                    title: 'Ocurrió un error',
+                    message: 'No se pudo completar la acción, intenta nuevamente'
+                }))
+            })
 
         } catch (error) {
-            console.log(error);
+            dispatch(setModalError({
+                open: true,
+                title: 'Ocurrió un error',
+                message: 'No se pudo completar la acción, intenta nuevamente'
+            }))
         } finally {
             dispatch(setIsLoading(false))
         }
@@ -134,9 +172,21 @@ export default function useUsers(){
                     dispatch(resetFormUser())
                     openUser(null)
                     getAllUsers()
+
+                    dispatch(setModalMessage({
+                        open: true,
+                        title: 'Contraseña reiniciada correctamente',
+                        message: `Nueva contraseña temporal: ${res.data?.data?.temporalPassword}`
+                    }))
                 }
             })
-            .catch(err => console.log(err))
+            .catch(err => {
+                dispatch(setModalError({
+                    open: true,
+                    title: 'Ocurrió un error',
+                    message: 'No se pudo completar la acción, intenta nuevamente'
+                }))
+            })
 
         } catch (error) {
             
@@ -146,7 +196,9 @@ export default function useUsers(){
     }
 
     useEffect(() => {
-        getAllUsers()
+        if(userData.rol === 'ADMIN'){
+            getAllUsers()
+        }
     }, [])
 
     return{
