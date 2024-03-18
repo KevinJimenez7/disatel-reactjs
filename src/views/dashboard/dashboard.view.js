@@ -1,4 +1,4 @@
-import { ListItem, ListItemButton, ListItemIcon, ListItemText, Slide } from '@mui/material'
+import { Slide } from '@mui/material'
 import Folders from '../../components/foldersList'
 import useDashboard from '../../hooks/useDashboard'
 import './dashboard.style.css'
@@ -9,8 +9,12 @@ import Credential from '../../components/credentialDetail'
 import Users from '../../components/userList'
 import UserDetail from '../../components/userDetail'
 import ModalPassword from '../modals/modalCredential'
+import { useSelector } from 'react-redux'
+import { Badge, Email, Person } from '@mui/icons-material'
 
 export default function Dashboard (){
+
+    const {userData} = useSelector(state => state.auth)
 
     const {
         visibleFolders,
@@ -28,6 +32,8 @@ export default function Dashboard (){
             <Slide style={{zIndex: 50}} direction='right' in = {visibleFolders} mountOnEnter unmountOnExit>
                 <section className="folders-container">
                     <h3>Prueba Técnica, Corporación Disatel SA</h3>
+                    
+                    <div className='info'><Person/>{userData.username}</div>
                     <hr/>
                     <Folders/>
                 </section>

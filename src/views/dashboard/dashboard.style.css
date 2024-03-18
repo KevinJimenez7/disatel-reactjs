@@ -24,7 +24,14 @@
 }
 
 .folders-container hr{
-    width: 70%;
+    width: 90%;
+    opacity: 0.5;
+}
+
+.folders-container .info{
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .credentials-container{
